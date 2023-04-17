@@ -44,7 +44,6 @@ public class WordTestProgram extends JFrame implements MouseListener, MouseMotio
  
 	public WordTestProgram() {
 		init();
-		
 	}
 	
 	public void init() {
@@ -74,7 +73,7 @@ public class WordTestProgram extends JFrame implements MouseListener, MouseMotio
 		mainPanelImage = new ImageIcon(files[0].getAbsolutePath()).getImage().getScaledInstance(mainPanel.getWidth()-btnPanelWidth-Main.GAB*3, mainPanel.getHeight()-Main.GAB*2, Image.SCALE_SMOOTH);
 		//버튼 세팅
 		for(int i = 0; i < 4; i++) {
-		btn[i].setBounds(Main.GAB,Main.GAB + (100+Main.GAB)*i, btnPanel.getWidth()-Main.GAB*2,100);
+		btn[i].setBounds(Main.GAB,Main.GAB + (btnPanel.getHeight()/4-Main.GAB+Main.GAB*3/4)*i, btnPanel.getWidth()-Main.GAB*2,btnPanel.getHeight()/4-Main.GAB);
 		btnPanel.add(btn[i]);
 		btn[i].setFont(C.btnFont);
 		btn[i].addActionListener(new ActionSetting());
@@ -92,7 +91,7 @@ public class WordTestProgram extends JFrame implements MouseListener, MouseMotio
 			g.fillRect(0, 0, getWidth(), getHeight());
 			
 			g.setColor(C.black);
-			g.setFont(C.fiftyFont);
+			g.setFont(C.examFont);
 			g.drawString(title, Main.GAB*2, Main.GAB*10);
 			if(mainPanelImage!=null) {
 			g.drawImage(mainPanelImage,btnPanelWidth+Main.GAB*2,Main.GAB,this);

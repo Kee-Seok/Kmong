@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -25,7 +26,10 @@ public class ExamStart extends JFrame{
 	static ArrayList<Word> newWord = new ArrayList<>(); //시험 본 후 저장된단어들, 나중에 답이 맞는지 틀린지 채점 후 Word클래스의 correctCount 숫자 변화시킬거임.
 	static JLabel[] num;
 	static JLabel[] exam;
-	static JTextField[] answer;
+	static JTextField[] answer, answer2;
+	static JCheckBox[] check;
+
+	ArrayList<String> onceInstance = new ArrayList<>();
 	
 	JButton submitBtn = new JButton("제출");
 	
@@ -36,6 +40,7 @@ public class ExamStart extends JFrame{
 	
 	int fontSize = 26;
 
+	//
 	JPanel checkPanel = new JPanel();
 	JPanel checkPanel2 = new JPanel();
 	
@@ -56,13 +61,15 @@ public class ExamStart extends JFrame{
 		Collections.shuffle(word);
 		scroll = new JScrollPane(examPanel2,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scroll2 = new JScrollPane(checkPanel2,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		int examPanelHeight = (fontSize + 5) * k;
+		int examPanelHeight = (fontSize + 4*13/10) * k;
 		examPanel2.setPreferredSize(new Dimension(scroll.getViewport().getWidth(), examPanelHeight));
 		examPanel2.setLayout(null);
 		scroll.setBounds(Main.GAB,Main.GAB,Main.SCREEN_WIDTH*4/5-Main.GAB*2,Main.SCREEN_HEIGHT-Main.GAB*2);
 		num = new JLabel[k];
 		exam = new JLabel[k];
 		answer = new JTextField[k];
+		answer2 = new JTextField[k];
+		check = new JCheckBox[k];
 		System.out.println(k);
 		for(int i = 0; i < k; i++) {
 			num[i] = new JLabel(i+1+".");
@@ -70,11 +77,11 @@ public class ExamStart extends JFrame{
 			num[i].setBounds(10, 10 + labelHeight * i, labelWidth, labelHeight);
 			exam[i] = new JLabel(word.get(i).getEnglish());
 			exam[i].setFont(C.examFont);
-			exam[i].setBounds(10 + labelWidth, 10 + labelHeight * i, 300, labelHeight);
+			exam[i].setBounds(labelWidth-Main.GAB*2, 10 + labelHeight * i, 300, labelHeight);
 
 			answer[i] = new JTextField(10);
 			answer[i].setFont(C.examFont);
-			answer[i].setBounds(10 + labelWidth + 210, 10 + labelHeight * i, textFieldWidth*2+100, textFieldHeight);
+			answer[i].setBounds(10 + scroll.getWidth()*1/3, 10 + labelHeight * i, scroll.getWidth()*7/11-Main.GAB, textFieldHeight);
 			
 			examPanel2.add(num[i]);
 			examPanel2.add(exam[i]);
@@ -85,7 +92,7 @@ public class ExamStart extends JFrame{
 		
 		checkPanel2.setPreferredSize(new Dimension(scroll2.getViewport().getWidth(), examPanelHeight));
 		checkPanel2.setLayout(null);
-		scroll2.setBounds(Main.GAB,Main.GAB,Main.SCREEN_WIDTH*4/5-Main.GAB*2,Main.SCREEN_HEIGHT-Main.GAB*2);
+		scroll2.setBounds(Main.GAB,Main.GAB,Main.SCREEN_WIDTH*5/5-Main.GAB*2,Main.SCREEN_HEIGHT-Main.GAB*2);
 		for(int i = 0; i < k; i++) {
 			num[i] = new JLabel(i+1+".");
 			num[i].setFont(C.examFont);
@@ -94,13 +101,20 @@ public class ExamStart extends JFrame{
 			exam[i].setFont(C.examFont);
 			exam[i].setBounds(10 + labelWidth, 10 + labelHeight * i, 300, labelHeight);
 
-			answer[i] = new JTextField(10);
-			answer[i].setFont(C.examFont);
-			answer[i].setBounds(10 + labelWidth + 210, 10 + labelHeight * i, textFieldWidth*2+100, textFieldHeight);
+			answer2[i] = word.get(i).tf;
+			answer2[i].setFont(C.examFont);
+			answer2[i].setBounds(10 + labelWidth + 100, 10 + labelHeight * i, textFieldWidth*2, textFieldHeight);
+			
+			check[i] = word.get(i).correctCheck;
+			check[i].setFont(C.examFont);
+			check[i].setBounds(10 + labelWidth +textFieldWidth*2+110, 10 + labelHeight * i, labelHeight, labelHeight);
+			
+			
 			
 			checkPanel2.add(num[i]);
 			checkPanel2.add(exam[i]);
-			checkPanel2.add(answer[i]);
+			checkPanel2.add(answer2[i]);
+			checkPanel2.add(check[i]);
 		}
 		
 		examPanel1.setBackground(C.a614124[3]);
@@ -115,7 +129,7 @@ public class ExamStart extends JFrame{
 		submitBtn.setFocusable(true);
 		examPanel1.add(scroll);
 		examPanel1.add(submitBtn);
-		checkPanel.add(checkPanel2);
+		checkPanel.add(scroll2);
 		checkPanel.setVisible(false);
 		c.add(checkPanel);
 		c.add(examPanel1);
@@ -149,6 +163,9 @@ public class ExamStart extends JFrame{
 		public void actionPerformed(ActionEvent e) {
 			if(e.getSource()==submitBtn) {
 				requestFocus();
+				for(int i = 0; i < ExamSetFrame.k; i++) {
+					answer2[i].setText(answer[i].getText());
+				}
 				goToCheckPanel();
 			}
 		}
