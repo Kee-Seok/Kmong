@@ -4,10 +4,14 @@ import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.util.Collections;
 
 import javax.swing.JButton;
@@ -26,11 +30,15 @@ public class ExamSetFrame extends JFrame{
 	JButton startBtn = new JButton("시작");
 	static int k; //단어 개수 지정 후 그 개수를 담을 변수
 	ExamStart es;
-	
+	Point p = new Point();
+	Point newP = new Point();
 	public ExamSetFrame() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setSize(Main.SCREEN_WIDTH,Main.SCREEN_HEIGHT);
 		c.setBackground(C.a10035[1]);
+		
+		addMouseListener(new MouseSetting());
+		addMouseMotionListener(new MouseSetting());
 		
 		setLocationRelativeTo(null);
 		setLayout(new GridBagLayout());
@@ -114,16 +122,20 @@ public class ExamSetFrame extends JFrame{
 			switch(e.getKeyCode()) {
 			case KeyEvent.VK_ESCAPE :
 				dispose();
+				
 				break;
 			case KeyEvent.VK_ENTER :
 				requestFocus();
-				if(isNumber(tf.getText())) {
+				if(isNumber(tf.getText())&&Integer.parseInt(tf.getText())<=100&&Integer.parseInt(tf.getText())<Ex.getWordNumber(0)) {
 				 goToExam();
-				}else {
+				}else if(!isNumber(tf.getText())){
 					JOptionPane.showMessageDialog(c, "숫자를 입력하세요.");
+				}else if(isNumber(tf.getText())&&Integer.parseInt(tf.getText())>100) {
+					JOptionPane.showMessageDialog(c, "숫자를 100개 이하로 작성해주세요.");
+				}else if(Integer.parseInt(tf.getText())>Ex.getWordNumber(0)) {
+					JOptionPane.showMessageDialog(c, "숫자가 엑셀에 입력된 단어의 수보다 큽니다.");
 				}
 				tf.setText("");
-				es.requestFocus();
 				break;
 			}
 		}
@@ -135,6 +147,7 @@ public class ExamSetFrame extends JFrame{
 				requestFocus();
 				if(isNumber(tf.getText())) {
 				 goToExam();
+				 dispose();
 				}else {
 					JOptionPane.showMessageDialog(c, "숫자를 입력하세요.");
 				}
@@ -142,6 +155,41 @@ public class ExamSetFrame extends JFrame{
 			}
 		}
 
+	}
+	//윈도우 창을 움직일 마우스 리스너
+	class MouseSetting implements MouseMotionListener, MouseListener{
+
+		public void mouseClicked(MouseEvent e) {
+			
+		}
+
+		public void mousePressed(MouseEvent e) {
+			p = e.getPoint();
+			requestFocus();
+		}
+
+		public void mouseReleased(MouseEvent e) {
+			
+		}
+
+		public void mouseEntered(MouseEvent e) {
+			
+		}
+
+		public void mouseExited(MouseEvent e) {
+			
+		}
+
+		public void mouseDragged(MouseEvent e) {
+			newP = new Point(e.getLocationOnScreen().x-p.x,e.getLocationOnScreen().y-p.y);
+			setLocation(newP.x,newP.y);
+			requestFocus();
+		}
+
+		public void mouseMoved(MouseEvent e) {
+			
+		}
+		
 	}
 }
 	

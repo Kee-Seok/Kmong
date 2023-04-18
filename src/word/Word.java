@@ -6,7 +6,7 @@ import javax.swing.JTextField;
 public class Word {
     private String english;   // 영어 단어
     private String meaning;   // 단어의 뜻
-    private int correctCount; // 맞춘 갯수
+    public int correctCount; // 맞춘 갯수
     public JCheckBox correctCheck = new JCheckBox();
     public JTextField tf = new JTextField(10);
     public Word(String english, String meaning, int correctCount) {
